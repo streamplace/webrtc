@@ -104,7 +104,7 @@ type SettingEngine struct {
 	LoggerFactory                             logging.LoggerFactory
 	iceTCPMux                                 ice.TCPMux
 	iceUDPMux                                 ice.UDPMux
-	iceUDPMuxSrflx                            ice.UniversalUDPMux
+	iceUDPMuxSrflx                            []ice.UniversalUDPMux
 	iceProxyDialer                            proxy.Dialer
 	iceDisableActiveTCP                       bool
 	iceUseCandidateCheckPriority              bool
@@ -503,8 +503,9 @@ func (e *SettingEngine) SetICEUDPMux(udpMux ice.UDPMux) {
 // multiplexed onto a single UDP port. This enables STUN binding requests, used
 // to gather server reflexive candidates, to share the same port as host
 // candidates instead of allocating an additional port per PeerConnection.
-// The mux should be started prior to creating PeerConnections.
-func (e *SettingEngine) SetICEUDPMuxSrflx(udpMuxSrflx ice.UniversalUDPMux) {
+// Each mux should be started prior to creating PeerConnections. Multiple muxes
+// support separate local addresses sharing the same UDP port.
+func (e *SettingEngine) SetICEUDPMuxSrflx(udpMuxSrflx ...ice.UniversalUDPMux) {
 	e.iceUDPMuxSrflx = udpMuxSrflx
 }
 

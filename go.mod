@@ -33,3 +33,5 @@ require (
 	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
 )
+
+replace github.com/pion/ice/v4 => github.com/streamplace/ice/v4 v4.4.9-0.20261026221821-67ea7fa6335e

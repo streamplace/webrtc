@@ -79,27 +79,46 @@ func TestICEGatherer_UDPMuxSrflx(t *testing.T) {
 	require.NoError(t, err)
 	defer func() { assert.NoError(t, server.Close()) }()
 
-	muxConn, err := listenConfig.ListenPacket(t.Context(), "udp4", "127.0.0.1:0")
+	var muxes []ice.UniversalUDPMux
+	mux, err := ice.NewMultiUDPMuxFromPort(0,
+		ice.UDPMuxFromPortWithNetworks(ice.NetworkTypeUDP4), ice.UDPMuxFromPortWithLoopback(),
+		ice.UDPMuxFromPortWithMuxFactory(func(params ice.UDPMuxParams) ice.UDPMux {
+			mux := ice.NewUniversalUDPMuxDefault(ice.UniversalUDPMuxParams{UDPConn: params.UDPConn})
+			muxes = append(muxes, mux)
+
+			return mux
+		}),
+	)
 	require.NoError(t, err)
-	mux := ice.NewUniversalUDPMuxDefault(ice.UniversalUDPMuxParams{UDPConn: muxConn})
 	defer func() { assert.NoError(t, mux.Close()) }()
+	addresses := mux.GetListenAddresses()
+	require.GreaterOrEqual(t, len(addresses), 2)
 
 	se := SettingEngine{}
 	se.SetNetworkTypes([]NetworkType{NetworkTypeUDP4})
 	se.SetIncludeLoopbackCandidate(true)
 	se.SetICEUDPMux(mux)
-	se.SetICEUDPMuxSrflx(mux)
+	se.SetICEUDPMuxSrflx(muxes...)
 
 	for range 2 {
 		candidates := gatherCandidatesWithSettingEngine(t, se, ICEGatherOptions{
 			ICEServers: []ICEServer{{URLs: []string{"stun:" + stunConn.LocalAddr().String()}}},
 		})
-		var types []ICECandidateType
+		var hosts, srflx []string
 		for _, candidate := range candidates {
-			types = append(types, candidate.Typ)
-			assert.Equal(t, muxConn.LocalAddr().String(), fmt.Sprintf("%s:%d", candidate.Address, candidate.Port))
+			address := fmt.Sprintf("%s:%d", candidate.Address, candidate.Port)
+			if candidate.Typ == ICECandidateTypeHost {
+				hosts = append(hosts, address)
+			} else if candidate.Typ == ICECandidateTypeSrflx {
+				srflx = append(srflx, address)
+			}
 		}
-		assert.ElementsMatch(t, []ICECandidateType{ICECandidateTypeHost, ICECandidateTypeSrflx}, types)
+		var expected []string
+		for _, address := range addresses {
+			expected = append(expected, address.String())
+		}
+		assert.ElementsMatch(t, expected, hosts)
+		assert.ElementsMatch(t, expected, srflx)
 	}
 }
 
