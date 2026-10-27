@@ -63,8 +63,8 @@ github.com/pion/turn/v5 v5.1.2/go.mod h1:57Oadc8fHnac15VFyCd6nEaBTVZBxQe2POUMD4l
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/sclevine/agouti v3.0.0+incompatible h1:8IBJS6PWz3uTlMP3YBIR5f+KAldcGuOeFkFbUWfBgK4=
 github.com/sclevine/agouti v3.0.0+incompatible/go.mod h1:b4WX9W9L1sfQKXeJf1mUTLZKJ48R1S7H23Ji7oFO5Bw=
-github.com/streamplace/ice/v4 v4.4.9-0.20261026221821-67ea7fa6335e h1:AZRRTvrNuT2yDfKuuxn4gNTlFuBQkBU+RMlnfhRKq7Y=
-github.com/streamplace/ice/v4 v4.4.9-0.20261026221821-67ea7fa6335e/go.mod h1:zCRRg4Mkpdbx9B+75fd4z2APvIXeIraeUOB7IMPt8mU=
+github.com/streamplace/ice/v4 v4.4.9-0.20261027004244-d5efc27073ca h1:BOJIwG20wVU0G4OGykZ5K12YjUF1yEj/iBU6t4zqMNw=
+github.com/streamplace/ice/v4 v4.4.9-0.20261027004244-d5efc27073ca/go.mod h1:zCRRg4Mkpdbx9B+75fd4z2APvIXeIraeUOB7IMPt8mU=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
 github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWDWE=
